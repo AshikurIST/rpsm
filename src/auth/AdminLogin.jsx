@@ -114,7 +114,7 @@ const AdminLogin = () => {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="text-sm">
+          {/* <div className="text-sm">
             <button
               type="button"
               onClick={fillDemoCredentials}
@@ -122,7 +122,7 @@ const AdminLogin = () => {
             >
               Use demo credentials
             </button>
-          </div>
+          </div> */}
           <div className="text-sm">
             <a href="#" className="text-primary-600 hover:text-primary-500">
               Forgot your password?
