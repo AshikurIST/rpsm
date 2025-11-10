@@ -846,6 +846,60 @@ export const seedData = () => {
       createdAt: new Date(Date.now() - 75 * 24 * 60 * 60 * 1000).toISOString()
     },
 
+    // Semester 4 results (student_1) - add past records so semester shows correctly
+    {
+      id: 'result_26',
+      studentId: 'student_1',
+      examId: 'exam_7', // Sem 4 Mid
+      marks: [
+        { subjectId: 'subject_10', total: 100, obtained: 84 }
+      ],
+      gpa: 3.40,
+      cgpa: 3.68,
+      grade: 'A-',
+      createdAt: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'result_27',
+      studentId: 'student_1',
+      examId: 'exam_8', // Sem 4 Final
+      marks: [
+        { subjectId: 'subject_10', total: 100, obtained: 88 }
+      ],
+      gpa: 3.70,
+      cgpa: 3.72,
+      grade: 'A',
+      createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+    },
+
+    // Semester 5 results (student_1)
+    {
+      id: 'result_28',
+      studentId: 'student_1',
+      examId: 'exam_9', // Sem 5 Mid
+      marks: [
+        { subjectId: 'subject_3', total: 100, obtained: 82 },
+        { subjectId: 'subject_9', total: 100, obtained: 80 }
+      ],
+      gpa: 3.50,
+      cgpa: 3.67,
+      grade: 'A-',
+      createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'result_29',
+      studentId: 'student_1',
+      examId: 'exam_10', // Sem 5 Final
+      marks: [
+        { subjectId: 'subject_4', total: 100, obtained: 86 },
+        { subjectId: 'subject_8', total: 100, obtained: 85 }
+      ],
+      gpa: 3.65,
+      cgpa: 3.69,
+      grade: 'A-',
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+    },
+
     // Other students (existing) — keep sample one exam to reduce noise
     {
       id: 'result_2',
