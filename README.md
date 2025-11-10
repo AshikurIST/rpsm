@@ -61,29 +61,31 @@ A comprehensive web application for educational institutions to manage students,
 npm run build
 ```
 
-## 🔐 Demo Credentials
+## 🔐 Admin & Student Login (Demo)
 
-### Admin Access
+This project ships with demo credentials so you can quickly explore both admin and student views.
+
+Admin (full access)
 - Email: `admin@rpms.edu`
 - Password: `admin123`
-- Access: Full administrative capabilities
-- Login URL: `/login/admin`
+- Login route: `/login/admin`
 
-### Student Access
+Student (view-only demo)
 - Email: `rakib.hasan@university.edu.bd`
 - Password: `student123`
-- Access: View-only student portal (mapped to seeded `student_1`)
-- Login URL: `/login/student`
+- Login route: `/login/student`
 
-Notes:
-- The student demo account is tied to the seeded student “Rakib Hasan” (`student_1`). Your student portal data (results, profile) will reflect this record.
-- If the Student Login form’s “Use demo credentials” fills a different email, please replace it with `rakib.hasan@university.edu.bd`.
+Quick notes and troubleshooting
+- The demo student is mapped to the seeded student record `student_1` (Rakib Hasan). Student data (results, profile) comes from the seed data in `src/lib/fakeSeed.js`.
+- If you don't see the expected demo data after a code change, clear the app localStorage and reload:
+   1. Open DevTools → Application → Local Storage
+   2. Remove keys that start with `rpms_` (or click Clear)
+   3. Refresh the app; the seeder will re-populate demo data
+- To change which student the demo login uses, edit the demo user in `src/store/authStore.js` (the `MOCK_USERS.student` object) to match the `id`/email of a seeded student.
 
-## 👩‍🎓 Student Authentication
+Security reminder
+- These credentials are for local development/demos only. Do not use them in production or on a publicly accessible server.
 
-- Role-based routes: `/login/student` redirects to `/student/home` after successful login.
-- The demo student is configured in `src/store/authStore.js` under `MOCK_USERS.student`.
-- To use a different seeded student, update the `MOCK_USERS.student` entry (id, name, email, etc.) to match a student in `src/lib/fakeSeed.js` and reload the app.
 
 ## 🎯 Key Features
 
