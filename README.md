@@ -98,23 +98,6 @@ Security reminder
 - **Toast Notifications**: User-friendly feedback for all actions
 - **Print-friendly Results**: Student marksheets ready for printing
 
-## 📊 Grade Scale
-
-| Percentage | Letter Grade | GPA Points |
-|------------|--------------|------------|
-| 80-100     | A+           | 4.0        |
-| 75-79      | A            | 3.75       |
-| 70-74      | A-           | 3.5        |
-| 65-69      | B+           | 3.25       |
-| 60-64      | B            | 3.0        |
-| 55-59      | B-           | 2.75       |
-| 50-54      | C+           | 2.5        |
-| 45-49      | C            | 2.25       |
-| 40-44      | D            | 2.0        |
-| 0-39       | F            | 0.0        |
-
----
-
 **Built with ❤️ using React, Tailwind CSS, and modern web technologies**
 
 ## Expanding the ESLint configuration
