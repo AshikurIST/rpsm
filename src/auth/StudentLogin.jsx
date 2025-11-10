@@ -82,7 +82,7 @@ const StudentLogin = () => {
           control={control}
           label="Email Address"
           type="email"
-          placeholder="student@rpms.edu"
+          placeholder="student@university.edu.bd"
           required
           className="space-y-2"
         />
