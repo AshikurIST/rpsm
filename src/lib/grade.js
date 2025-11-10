@@ -87,16 +87,36 @@ export const calculateCGPA = (examResults, subjects) => {
  * Get overall grade from GPA
  */
 export const getOverallGradeFromGPA = (gpa) => {
-  // Find the closest grade scale entry
-  const grade = GRADE_SCALE.find(g => gpa >= g.gpa - 0.125 && gpa <= g.gpa + 0.125);
-  if (grade) return grade;
-  
-  // If not exact match, find the range it falls into
-  for (let i = 0; i < GRADE_SCALE.length - 1; i++) {
-    if (gpa <= GRADE_SCALE[i].gpa && gpa > GRADE_SCALE[i + 1].gpa) {
-      return GRADE_SCALE[i];
-    }
+  if (!gpa || gpa === 0) {
+    return { letter: 'F', gpa: 0.0 };
   }
+
+  // For GPA 3.75 and above
+  if (gpa >= 3.75) return { letter: 'A', gpa: 3.75 };
+  
+  // For GPA 3.5 to 3.74
+  if (gpa >= 3.5) return { letter: 'A-', gpa: 3.5 };
+  
+  // For GPA 3.25 to 3.49
+  if (gpa >= 3.25) return { letter: 'B+', gpa: 3.25 };
+  
+  // For GPA 3.0 to 3.24
+  if (gpa >= 3.0) return { letter: 'B', gpa: 3.0 };
+  
+  // For GPA 2.75 to 2.99
+  if (gpa >= 2.75) return { letter: 'B-', gpa: 2.75 };
+  
+  // For GPA 2.5 to 2.74
+  if (gpa >= 2.5) return { letter: 'C+', gpa: 2.5 };
+  
+  // For GPA 2.25 to 2.49
+  if (gpa >= 2.25) return { letter: 'C', gpa: 2.25 };
+  
+  // For GPA 2.0 to 2.24
+  if (gpa >= 2.0) return { letter: 'D', gpa: 2.0 };
+  
+  // For GPA below 2.0
+  return { letter: 'F', gpa: 0.0 };
   
   return GRADE_SCALE[GRADE_SCALE.length - 1]; // Default to F
 };

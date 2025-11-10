@@ -3,17 +3,20 @@ import { GRADE_SCALE } from './grade';
 
 // Generate seed data if none exists
 export const seedData = () => {
-  // Load existing data (if any) for additive seeding
+  // Clear existing data and start fresh
+  storage.clear();
+
+  // Initialize empty data structure
   const existing = {
-    students: storage.get(STORAGE_KEYS.STUDENTS) || [],
-    teachers: storage.get(STORAGE_KEYS.TEACHERS) || [],
-    subjects: storage.get(STORAGE_KEYS.SUBJECTS) || [],
-    classes: storage.get(STORAGE_KEYS.CLASSES) || [],
-    exams: storage.get(STORAGE_KEYS.EXAMS) || [],
-    assignments: storage.get(STORAGE_KEYS.ASSIGNMENTS) || [],
-    announcements: storage.get(STORAGE_KEYS.ANNOUNCEMENTS) || [],
-    results: storage.get(STORAGE_KEYS.RESULTS) || [],
-    settings: storage.get(STORAGE_KEYS.SETTINGS) || null,
+    students: [],
+    teachers: [],
+    subjects: [],
+    classes: [],
+    exams: [],
+    assignments: [],
+    announcements: [],
+    results: [],
+    settings: null,
   };
 
   const mergeById = (arr, newItems) => {
@@ -325,6 +328,69 @@ export const seedData = () => {
   ];
 
 
+  // Seed past exam results for semester 1
+  const sem1Results = [
+    {
+      id: 'result_sem1_mid',
+      studentId: 'student_1',
+      examId: 'exam_1',
+      marks: [
+        { subjectId: 'subject_1', total: 100, obtained: 85 },
+        { subjectId: 'subject_2', total: 100, obtained: 87 },
+        { subjectId: 'subject_3', total: 100, obtained: 83 }
+      ],
+      gpa: 3.75,
+      cgpa: 3.75,
+      semester: 1,
+      createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'result_sem1_quiz1',
+      studentId: 'student_1',
+      examId: 'exam_1_quiz',
+      marks: [
+        { subjectId: 'subject_1', total: 100, obtained: 86 },
+        { subjectId: 'subject_2', total: 100, obtained: 85 },
+        { subjectId: 'subject_3', total: 100, obtained: 87 }
+      ],
+      gpa: 3.78,
+      cgpa: 3.77,
+      semester: 1,
+      createdAt: new Date(Date.now() - 75 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'result_sem1_quiz2',
+      studentId: 'student_1',
+      examId: 'exam_2_quiz',
+      marks: [
+        { subjectId: 'subject_1', total: 100, obtained: 88 },
+        { subjectId: 'subject_2', total: 100, obtained: 86 },
+        { subjectId: 'subject_3', total: 100, obtained: 84 }
+      ],
+      gpa: 3.80,
+      cgpa: 3.78,
+      semester: 1,
+      createdAt: new Date(Date.now() - 65 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'result_sem1_final',
+      studentId: 'student_1',
+      examId: 'exam_2',
+      marks: [
+        { subjectId: 'subject_1', total: 100, obtained: 89 },
+        { subjectId: 'subject_2', total: 100, obtained: 88 },
+        { subjectId: 'subject_3', total: 100, obtained: 85 }
+      ],
+      gpa: 3.85,
+      cgpa: 3.80,
+      semester: 1,
+      createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+    }
+  ];
+
+  // Store the semester 1 results
+  storage.set(STORAGE_KEYS.RESULTS, sem1Results);
+
   // Seed Classes
   const classes = [
     {
@@ -425,16 +491,34 @@ export const seedData = () => {
     {
       id: 'exam_1',
       title: 'Mid Term Examination - Spring 2025',
-      date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+      date: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
       semester: 1,
       department: 'Computer Science & Engineering',
       subjects: ['subject_1', 'subject_2', 'subject_3'],
-      createdAt: new Date().toISOString()
+      createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'exam_1_quiz',
+      title: 'Quiz 1 - Spring 2025',
+      date: new Date(Date.now() - 85 * 24 * 60 * 60 * 1000).toISOString(),
+      semester: 1,
+      department: 'Computer Science & Engineering',
+      subjects: ['subject_1', 'subject_2', 'subject_3'],
+      createdAt: new Date(Date.now() - 85 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
       id: 'exam_2',
       title: 'Final Examination - Spring 2025',
-      date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+      date: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+      semester: 1,
+      department: 'Computer Science & Engineering',
+      subjects: ['subject_1', 'subject_2', 'subject_3'],
+      createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: 'exam_2_quiz',
+      title: 'Quiz 2 - Spring 2025',
+      date: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString(),
       semester: 1,
       department: 'Computer Science & Engineering',
       subjects: ['subject_1', 'subject_2', 'subject_3'],

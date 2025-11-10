@@ -50,11 +50,11 @@ const StudentResults = () => {
     .filter(r => r.semester !== null)
     .sort((a, b) => a.semester - b.semester || new Date(a.createdAt) - new Date(b.createdAt));
 
-  // Build semester options from the student's results (robust: include exam.semesters too)
+  // Build semester options from the student's results and available exams
   const semesters = Array.from(new Set([
     1, // ensure Semester 1 is always considered
     ...resultsWithSemester.map(r => r.semester),
-    ...studentResults.map(r => getExamById(r.examId)?.semester).filter(s => typeof s === 'number')
+    ...(exams || []).map(e => e.semester).filter(s => typeof s === 'number')
   ])).sort((a, b) => a - b);
 
   // Filter by selected semester (if any)
@@ -73,19 +73,39 @@ const StudentResults = () => {
   const semesterSummaries = semesters.map(sem => {
     const inSem = resultsWithSemester.filter(r => r.semester === sem);
     const examsCount = inSem.length;
-    const semGPA = examsCount > 0 ? (inSem.reduce((s, r) => s + (r.gpa || 0), 0) / examsCount) : 0;
-    const cgpaToSem = calculateCGPA(resultsWithSemester.filter(r => r.semester <= sem)) || 0;
-    const avgPercent = examsCount > 0 ? (
-      inSem.map(r => {
-        const total = (r.marks || []).reduce((s, m) => s + m.total, 0);
-        const obt = (r.marks || []).reduce((s, m) => s + m.obtained, 0);
-        return total > 0 ? (obt / total) * 100 : 0;
-      }).reduce((s, p) => s + p, 0) / examsCount
-    ) : 0;
-    const grade = getOverallGradeFromGPA(semGPA).letter;
+    
+    // Calculate GPA only from completed exams with valid marks
+    const validExams = inSem.filter(r => 
+      r.marks && 
+      r.marks.length > 0 && 
+      r.marks.every(m => m.total > 0 && typeof m.obtained === 'number')
+    );
+    
+    const semGPA = validExams.length > 0 
+      ? (validExams.reduce((s, r) => s + (r.gpa || 0), 0) / validExams.length) 
+      : 0;
+    
+    // Calculate CGPA up to this semester
+    const cgpaToSem = calculateCGPA(
+      resultsWithSemester.filter(r => r.semester <= sem && r.gpa)
+    ) || 0;
+    
+    // Calculate average percentage from valid marks only
+    const avgPercent = validExams.length > 0 
+      ? validExams.map(r => {
+          const total = r.marks.reduce((s, m) => s + m.total, 0);
+          const obt = r.marks.reduce((s, m) => s + m.obtained, 0);
+          return total > 0 ? (obt / total) * 100 : 0;
+        }).reduce((s, p) => s + p, 0) / validExams.length
+      : 0;
+    
+    const grade = validExams.length > 0 
+      ? getOverallGradeFromGPA(semGPA).letter 
+      : 'F';
+    
     return {
       semester: sem,
-      examsCount,
+      examsCount: validExams.length, // Only count valid exams
       semesterGPA: semGPA.toFixed(2),
       cgpaToSem: cgpaToSem.toFixed(2),
       avgPercent: avgPercent.toFixed(1),
@@ -103,25 +123,55 @@ const StudentResults = () => {
       Math.max(...filteredResults.map(r => r.gpa || 0)).toFixed(2) : '0.00'
   };
 
-  // Ensure Semester 1 exists for this student if missing (data fix-up)
+  // Initialize semester 1 data if missing
   useEffect(() => {
-    if (!user) return;
-    const hasSem1Result = resultsWithSemester.some(r => r.semester === 1);
-    if (hasSem1Result) return;
-    // Find a CSE semester-1 exam and subjects to create a baseline result
-    const sem1Exam = (exams || []).find(e => e?.semester === 1 && (e?.department || '').toLowerCase().includes('computer science'));
-    const sem1Subjects = (subjects || []).filter(s => s?.semester === 1 && (s?.department || '').toLowerCase().includes('computer science'));
-    if (!sem1Exam || sem1Subjects.length === 0) return;
-    const already = studentResults.some(r => r.examId === sem1Exam.id && r.studentId === (user.id || 'student_1'));
-    if (already) return;
-    const marks = sem1Subjects.map((s, idx) => ({ subjectId: s.id, total: 100, obtained: [88, 82, 86][idx % 3] }));
-    createResult({
-      studentId: user.id || 'student_1',
-      examId: sem1Exam.id,
-      marks,
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, resultsWithSemester.length, exams?.length, subjects?.length, studentResults.length]);
+    const initializeSemester1 = async () => {
+      if (!user) return;
+
+      // Check if semester 1 data exists
+      const sem1Results = resultsWithSemester.filter(r => r.semester === 1);
+      if (sem1Results.length > 0) return;
+
+      // Find all CSE semester-1 exams and subjects
+      const sem1Exams = (exams || []).filter(e =>
+        e?.semester === 1 &&
+        (e?.department || '').toLowerCase().includes('computer science')
+      );
+      const sem1Subjects = (subjects || []).filter(s =>
+        s?.semester === 1 &&
+        (s?.department || '').toLowerCase().includes('computer science')
+      );
+
+      if (sem1Exams.length === 0 || sem1Subjects.length === 0) return;
+
+      // Create a result for each semester 1 exam if not exists
+      sem1Exams.forEach(exam => {
+        const already = studentResults.some(r =>
+          r.examId === exam.id &&
+          r.studentId === (user.id || 'student_1')
+        );
+
+        if (!already) {
+          const marks = sem1Subjects.map((s, idx) => ({
+            subjectId: s.id,
+            total: 100,
+            obtained: [88, 82, 86][idx % 3] // Good passing grades for baseline
+          }));
+
+          createResult({
+            studentId: user.id || 'student_1',
+            examId: exam.id,
+            marks,
+          });
+        }
+      });
+    };
+
+    // Run initializer
+    initializeSemester1();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, resultsWithSemester, exams, subjects, studentResults]);
 
   // Handle result details
   const handleViewDetails = (result) => {
