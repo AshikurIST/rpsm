@@ -64,16 +64,26 @@ npm run build
 ## 🔐 Demo Credentials
 
 ### Admin Access
-- **Email**: `admin@rpms.dev`
-- **Password**: `admin123`
-- **Access**: Full administrative capabilities
+- Email: `admin@rpms.edu`
+- Password: `admin123`
+- Access: Full administrative capabilities
+- Login URL: `/login/admin`
 
 ### Student Access
-- **Email**: `student@rpms.dev`
-- **Password**: `student123`
-- **Access**: View-only student portal
+- Email: `rakib.hasan@university.edu.bd`
+- Password: `student123`
+- Access: View-only student portal (mapped to seeded `student_1`)
+- Login URL: `/login/student`
 
-*Note: You can click "Use demo credentials" on the login forms to auto-fill these credentials.*
+Notes:
+- The student demo account is tied to the seeded student “Rakib Hasan” (`student_1`). Your student portal data (results, profile) will reflect this record.
+- If the Student Login form’s “Use demo credentials” fills a different email, please replace it with `rakib.hasan@university.edu.bd`.
+
+## 👩‍🎓 Student Authentication
+
+- Role-based routes: `/login/student` redirects to `/student/home` after successful login.
+- The demo student is configured in `src/store/authStore.js` under `MOCK_USERS.student`.
+- To use a different seeded student, update the `MOCK_USERS.student` entry (id, name, email, etc.) to match a student in `src/lib/fakeSeed.js` and reload the app.
 
 ## 🎯 Key Features
 

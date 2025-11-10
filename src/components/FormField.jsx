@@ -1,6 +1,9 @@
 import React from 'react';
 import { useController } from 'react-hook-form';
 
+// Flexible FormField
+// - If children are provided, acts as a simple layout wrapper (no RHF control needed)
+// - If no children and name+control are provided, renders a controlled input using RHF
 const FormField = ({
   name,
   control,
@@ -13,16 +16,23 @@ const FormField = ({
   className = '',
   inputClassName = '',
   rows = 3, // for textarea
+  error: externalError, // allow passing error from parent
+  children,
   ...props
 }) => {
-  const {
-    field,
-    fieldState: { error },
-  } = useController({
-    name,
-    control,
-    rules: { required: required && `${label} is required` },
-  });
+  const isControlled = !!(control && name) && !children;
+
+  // When controlled, use RHF useController
+  const controller = isControlled
+    ? useController({
+        name,
+        control,
+        rules: { required: required && `${label} is required` },
+      })
+    : { field: {}, fieldState: { error: externalError ? { message: externalError } : undefined } };
+
+  const { field, fieldState } = controller;
+  const error = fieldState?.error;
 
   const baseInputClass = `
     input-field
@@ -31,6 +41,8 @@ const FormField = ({
   `;
 
   const renderInput = () => {
+    if (children) return children; // Uncontrolled: render provided children (with register, etc.)
+
     switch (type) {
       case 'textarea':
         return (
@@ -100,7 +112,7 @@ const FormField = ({
     }
   };
 
-  if (type === 'checkbox') {
+  if (type === 'checkbox' && !children) {
     return (
       <div className={className}>
         {renderInput()}

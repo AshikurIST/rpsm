@@ -4,23 +4,24 @@ import { storage, STORAGE_KEYS } from '../lib/persist';
 // Mock users for demonstration
 const MOCK_USERS = {
   admin: {
-    email: 'admin@rpms.dev',
+    email: 'admin@rpms.edu',
     password: 'admin123',
     role: 'admin',
     name: 'Admin User',
     id: 'admin_1'
   },
   student: {
-    email: 'student@rpms.dev',
+    // Use Bangladeshi university CSE student matching seeded data
+    email: 'rakib.hasan@university.edu.bd',
     password: 'student123',
     role: 'student',
-    name: 'John Doe',
+    name: 'Rakib Hasan',
     id: 'student_1',
-    roll: 'CS21001',
-    regNo: 'REG21001',
-    department: 'Computer Science',
-    batch: '2021',
-    phone: '+1234567890'
+    roll: 'CSE23001',
+    regNo: 'REG23001',
+    department: 'Computer Science & Engineering',
+    batch: '2023',
+    phone: '+8801711000001'
   }
 };
 

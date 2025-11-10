@@ -10,7 +10,7 @@ const StudentHome = () => {
   const { user } = useAuthStore();
   const { exams, results, getResultsByStudentId } = useDataStore();
   
-  const studentResults = getResultsByStudentId('student_1'); // Use the logged-in student's ID
+  const studentResults = getResultsByStudentId(user?.id || 'student_1');
   const upcomingExams = exams.filter(exam => new Date(exam.date) > new Date());
   const latestResult = studentResults[0];
 

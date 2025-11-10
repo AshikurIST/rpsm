@@ -315,9 +315,11 @@ const Results = () => {
           error={errors.examId?.message}
         >
           <select
-            {...register('examId', { required: 'Exam is required' })}
+            {...register('examId', { 
+              required: 'Exam is required',
+              onChange: (e) => setSelectedExam(e.target.value)
+            })}
             className="input"
-            onChange={(e) => setSelectedExam(e.target.value)}
           >
             <option value="">Select Exam</option>
             {exams.map(exam => (

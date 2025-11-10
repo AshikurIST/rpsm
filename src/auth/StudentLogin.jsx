@@ -59,7 +59,7 @@ const StudentLogin = () => {
     const emailInput = document.querySelector('input[name="email"]');
     const passwordInput = document.querySelector('input[name="password"]');
     if (emailInput && passwordInput) {
-      emailInput.value = 'student@rpms.dev';
+      emailInput.value = 'student@rpms.edu';
       passwordInput.value = 'student123';
       // Trigger change events
       emailInput.dispatchEvent(new Event('input', { bubbles: true }));
@@ -82,7 +82,7 @@ const StudentLogin = () => {
           control={control}
           label="Email Address"
           type="email"
-          placeholder="student@rpms.dev"
+          placeholder="student@rpms.edu"
           required
           className="space-y-2"
         />
